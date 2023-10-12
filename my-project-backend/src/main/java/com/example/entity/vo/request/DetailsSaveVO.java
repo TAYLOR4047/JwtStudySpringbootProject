@@ -7,7 +7,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 @Data
-public class DetailsSaceVO {
+public class DetailsSaveVO {
     @Pattern(regexp = "^[a-zA-Z0-9\\u4e00-\\u9fa5]+$")
     @Length(min = 1, max = 10)
     String username;

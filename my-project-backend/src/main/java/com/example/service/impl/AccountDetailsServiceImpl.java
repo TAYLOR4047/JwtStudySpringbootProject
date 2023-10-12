@@ -3,7 +3,7 @@ package com.example.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.entity.dto.Account;
 import com.example.entity.dto.AccountDetails;
-import com.example.entity.vo.request.DetailsSaceVO;
+import com.example.entity.vo.request.DetailsSaveVO;
 import com.example.mapper.AccountDetailsMapper;
 import com.example.service.AccountDetailsService;
 import com.example.service.AccountService;
@@ -22,7 +22,7 @@ public class AccountDetailsServiceImpl extends ServiceImpl<AccountDetailsMapper,
     }
 
     @Override
-    public synchronized boolean saveAccountDetails(int id, DetailsSaceVO vo) {
+    public synchronized boolean saveAccountDetails(int id, DetailsSaveVO vo) {
         Account account=accountService.findAccountByNameOrEmail(vo.getUsername());
         if(account==null||account.getId()==id){
             if(accountService.update()
