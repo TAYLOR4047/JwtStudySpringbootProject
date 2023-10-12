@@ -2,40 +2,52 @@
 import Card from "@/components/Card.vue";
 import {Message, Refresh, Select, User} from "@element-plus/icons-vue";
 import {useStore} from "@/store";
-import {computed} from "vue";
+import {reactive} from "vue";
 
 const store = useStore()
 const registerTime = computed(() => new Date(store.user.registerTime).toLocaleString())
 
+const baseForm=reactive({
+  username: '',
+  gender: 1,
+  phone: '',
+  qq: '',
+  wx: '',
+  desc: ''
+})
 
+const emailForm=reactive({
+  email: '',
+  code: ''
+})
 </script>
 
 <template>
   <div style="display: flex">
     <div class="settings-left">
       <card :icon="User" title="账号信息设置" desc="在此编辑个人信息">
-        <el-form label-position="top" style="margin: 0 10px 10px 10px">
-          <el-form-item label="用户名">
-            <el-input/>
+        <el-form :model="baseForm" label-position="top" style="margin: 0 10px 10px 10px">
+          <el-form-item label="用户名" prop="username">
+            <el-input v-model="baseForm.username"/>
           </el-form-item>
           <el-form-item label="性别">
-            <el-radio-group>
-              <el-radio label="1">男</el-radio>
-              <el-radio label="2">女</el-radio>
-              <el-radio label="3">保密</el-radio>
+            <el-radio-group v-model="baseForm.gender">
+              <el-radio label="0">男</el-radio>
+              <el-radio label="1">女</el-radio>
+              <el-radio label="2">保密</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="手机号">
-            <el-input/>
+          <el-form-item label="手机号" prop="phone">
+            <el-input v-model="baseForm.phone"/>
           </el-form-item>
-          <el-form-item label="QQ号">
-            <el-input/>
+          <el-form-item label="QQ号" prop="qq">
+            <el-input v-model="baseForm.qq"/>
           </el-form-item>
-          <el-form-item label="微信号">
-            <el-input/>
+          <el-form-item label="微信号" prop="wx">
+            <el-input v-model="baseForm.wx"/>
           </el-form-item>
-          <el-form-item label="个人简介">
-            <el-input type="textarea" :rows="6"/>
+          <el-form-item label="个人简介" prop="desc">
+            <el-input v-model="baseForm.desc" type="textarea" :rows="6"/>
           </el-form-item>
           <div>
             <el-button :icon="Select" type="success">保存用户信息</el-button>
@@ -44,7 +56,7 @@ const registerTime = computed(() => new Date(store.user.registerTime).toLocaleSt
       </card>
 
       <card style="margin-top: 10px" :icon="Message" title="电子邮件设置" desc="可以在此修改默认绑定">
-        <el-form label-position="top" style="margin: 0 10px 10px 10px">
+        <el-form :model="emailForm" label-position="top" style="margin: 0 10px 10px 10px">
           <el-form-item label="电子邮件">
             <el-input/>
           </el-form-item>
