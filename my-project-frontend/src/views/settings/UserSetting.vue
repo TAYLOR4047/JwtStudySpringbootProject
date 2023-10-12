@@ -7,6 +7,7 @@ import {computed} from "vue";
 const store = useStore()
 const registerTime = computed(() => new Date(store.user.registerTime).toLocaleString())
 
+
 </script>
 
 <template>
