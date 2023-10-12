@@ -19,6 +19,7 @@ defineProps({
         <div>{{desc}}</div>
       </div>
     </div>
+    <slot/>
   </div>
 </template>
 
@@ -30,6 +31,8 @@ defineProps({
   box-sizing: border-box;
   min-height: 20px;
   padding: 10px;
+/*  实现了slot插槽内文本的自动换行*/
+  word-wrap: break-word;
 }
 
 .card-header{
