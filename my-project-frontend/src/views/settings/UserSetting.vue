@@ -104,15 +104,25 @@ function sendEmailCode(){
     })
   })
 }
+function modifyEmail(){
+  emailFormRef.value.validate(isValid=>{
+    post('/api/user/modify-email',emailForm,()=>{
+      ElMessage.success('邮件修改成功')
+      store.user.email=emailForm.email
+      emailForm.code=''
+    })
+  })
+}
 </script>
 
+<!--TODO:之后可以尝试-->
 <template>
-  <div style="display: flex">
+  <div style="display: flex;max-width: 950px;margin: auto">
     <div class="settings-left">
       <card :icon="User" title="账号信息设置" desc="在此编辑个人信息" v-loading="loading.form">
         <el-form :model="baseForm" :rules="rules" ref="baseFormRef" label-position="top" style="margin: 0 10px 10px 10px">
           <el-form-item label="用户名" prop="username">
-            <el-input v-model="baseForm.username" maxlength="10"/>
+            <el-input v-model="baseForm.username" maxlength="20"/>
           </el-form-item>
           <el-form-item label="性别">
             <el-radio-group v-model="baseForm.gender">
@@ -159,7 +169,7 @@ function sendEmailCode(){
             </el-row>
           </el-form-item>
           <div>
-            <el-button :icon="Refresh" type="success">更新电子邮件</el-button>
+            <el-button :icon="Refresh" type="success" @click="modifyEmail"> 更新电子邮件</el-button>
           </div>
         </el-form>
       </card>
