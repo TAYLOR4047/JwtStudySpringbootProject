@@ -80,6 +80,30 @@ get('/api/user/details',data=>{
   baseForm.desc=desc.value=data.desc
   loading.form=false
 })
+
+const coldTime=ref(0)
+const isEmailValid=ref(true)
+const onValidate=(prop,isValid)=>{
+  if(prop==='email')
+    isEmailValid.value=isValid
+}
+function sendEmailCode(){
+  emailFormRef.value.validate(isValid=>{
+    coldTime.value=60
+    get(`/api/auth/ask-code?email=${emailForm.email}&type=modify`,()=>{
+      ElMessage.success(`验证码已成功发送到邮箱：${emailForm.email},请注意查收`)
+      const handle=setInterval(()=>{
+        coldTime.value--
+        if (coldTime.value===0){
+          clearInterval(handle)
+        }
+      },1000)
+    },(message)=>{
+      ElMessage.warning(message)
+      coldTime.value=0
+    })
+  })
+}
 </script>
 
 <template>
@@ -118,7 +142,7 @@ get('/api/user/details',data=>{
       </card>
 
       <card style="margin-top: 10px" :icon="Message" title="电子邮件设置" desc="可以在此修改默认绑定">
-        <el-form :model="emailForm" :rules="rules" ref="emailFormRef" label-position="top" style="margin: 0 10px 10px 10px">
+        <el-form :model="emailForm" @validate="onValidate" :rules="rules" ref="emailFormRef" label-position="top" style="margin: 0 10px 10px 10px">
           <el-form-item label="电子邮件" prop="email">
             <el-input v-model="emailForm.email"/>
           </el-form-item>
@@ -128,7 +152,9 @@ get('/api/user/details',data=>{
                 <el-input placeholder="请获取验证码" v-model="emailForm.code"/>
               </el-col>
               <el-col :span="6">
-                <el-button type="success" style="width: 100%" plain>获取验证码</el-button>
+                <el-button type="success" style="width: 100%" :disabled="!isEmailValid || coldTime>0"
+                           @click="sendEmailCode" plain>
+                  {{coldTime>0? `请稍后${coldTime}秒`:'获取验证码'}}</el-button>
               </el-col>
             </el-row>
           </el-form-item>
