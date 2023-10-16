@@ -48,6 +48,14 @@ function resetPassword(){
     }
   })
 }
+
+const privacy=reactive({
+  phone: false,
+  wx:false,
+  qq:false,
+  email:false,
+  gender:false
+})
 </script>
 
 <template>

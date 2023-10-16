@@ -89,19 +89,21 @@ const onValidate=(prop,isValid)=>{
 }
 function sendEmailCode(){
   emailFormRef.value.validate(isValid=>{
-    coldTime.value=60
-    get(`/api/auth/ask-code?email=${emailForm.email}&type=modify`,()=>{
-      ElMessage.success(`验证码已成功发送到邮箱：${emailForm.email},请注意查收`)
-      const handle=setInterval(()=>{
-        coldTime.value--
-        if (coldTime.value===0){
-          clearInterval(handle)
-        }
-      },1000)
-    },(message)=>{
-      ElMessage.warning(message)
-      coldTime.value=0
-    })
+    if(isValid){
+      coldTime.value=60
+      get(`/api/auth/ask-code?email=${emailForm.email}&type=modify`,()=>{
+        ElMessage.success(`验证码已成功发送到邮箱：${emailForm.email},请注意查收`)
+        const handle=setInterval(()=>{
+          coldTime.value--
+          if (coldTime.value===0){
+            clearInterval(handle)
+          }
+        },1000)
+      },(message)=>{
+        ElMessage.warning(message)
+        coldTime.value=0
+      })
+    }
   })
 }
 function modifyEmail(){
