@@ -9,8 +9,10 @@ import com.example.entity.vo.request.DetailsSaveVO;
 import com.example.entity.vo.request.ModifyEmailVO;
 import com.example.entity.vo.request.PrivacySaveVO;
 import com.example.entity.vo.response.AccountDetailsVO;
+import com.example.entity.vo.response.AccountPrivacyVO;
 import com.example.entity.vo.response.AccountVO;
 import com.example.service.AccountDetailsService;
+import com.example.service.AccountPrivacyService;
 import com.example.service.AccountService;
 import com.example.utils.Const;
 import jakarta.annotation.Resource;
@@ -28,6 +30,8 @@ public class AccountController {
     AccountService service;
     @Resource
     AccountDetailsService accountDetailsService;
+    @Resource
+    AccountPrivacyService privacyService;
 
     @GetMapping("/info")
     public RestBean<AccountVO> info(@RequestAttribute(Const.ATTR_USER_ID) int id){
@@ -65,7 +69,13 @@ public class AccountController {
     @PostMapping("/save-privacy")
     public RestBean<Void> savePrivacy(@RequestAttribute(Const.ATTR_USER_ID)int id,
                                       @RequestBody @Valid PrivacySaveVO vo){
+        privacyService.savePrivacy(id,vo);
+        return RestBean.success();
+    }
 
+    @GetMapping("/privacy")
+    public RestBean<AccountPrivacyVO> privacy(@RequestAttribute(Const.ATTR_USER_ID)int id){
+        return RestBean.success(privacyService.accountPrivacy(id).asViewObject(AccountPrivacyVO.class));
     }
 
     /**
