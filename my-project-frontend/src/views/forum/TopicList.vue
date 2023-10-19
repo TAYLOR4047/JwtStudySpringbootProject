@@ -1,7 +1,7 @@
 <script setup>
 
 import LightCard from "@/components/LightCard.vue";
-import {Calendar, CollectionTag} from "@element-plus/icons-vue";
+import {Calendar, CollectionTag, Link} from "@element-plus/icons-vue";
 import Weather from "@/components/Weather.vue";
 import {computed} from "vue";
 
@@ -47,6 +47,16 @@ const today=computed(()=>{
             <div>127.0.0.1</div>
           </div>
         </light-card>
+        <div style="font-size: 14px;margin-top: 10px;color: grey">
+          <el-icon><Link/></el-icon>
+          友情链接
+        </div>
+        <el-divider style="margin: 10px 0"/>
+        <div style="display: grid;grid-template-columns: repeat(2,1fr);grid-gap: 10px;margin-top: 10px">
+          <div class="friend-link">
+
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -58,5 +68,9 @@ const today=computed(()=>{
   justify-content: space-between;
   color: grey;
   font-size: 14px;
+}
+.friend-link{
+  border-radius: 5px;
+  overflow: hidden;
 }
 </style>
