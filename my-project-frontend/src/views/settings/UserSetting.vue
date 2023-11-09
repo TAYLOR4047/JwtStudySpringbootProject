@@ -9,7 +9,7 @@ import {ElMessage} from "element-plus";
 const store = useStore()
 const registerTime = computed(() => new Date(store.user.registerTime).toLocaleString())
 
-const desc=ref()
+const desc = ref()
 const baseFormRef = ref()
 const emailFormRef = ref()
 const baseForm = reactive({
@@ -49,69 +49,71 @@ const rules = {
   ]
 }
 
-const loading=reactive({
-  form:true,
-  base:false
+const loading = reactive({
+  form: true,
+  base: false
 })
 
-function saveDetails(){
-  baseFormRef.value.validate(isValid=>{
-    if(isValid){
-      loading.base=true
-      post('/api/user/save-details',baseForm,()=>{
+function saveDetails() {
+  baseFormRef.value.validate(isValid => {
+    if (isValid) {
+      loading.base = true
+      post('/api/user/save-details', baseForm, () => {
         ElMessage.success('用户信息保存成功')
-        store.user.username=baseForm.username
-        desc.value=baseForm.desc
-        loading.base=false
-      },(message)=>{
+        store.user.username = baseForm.username
+        desc.value = baseForm.desc
+        loading.base = false
+      }, (message) => {
         ElMessage.warning(message)
-        loading.base=false
+        loading.base = false
       })
     }
   })
 }
 
-get('/api/user/details',data=>{
-  baseForm.username=store.user.username
-  baseForm.gender=data.gender
-  baseForm.phone=data.phone
-  baseForm.wx=data.wx
-  baseForm.qq=data.qq
-  baseForm.desc=desc.value=data.desc
-  loading.form=false
+get('/api/user/details', data => {
+  baseForm.username = store.user.username
+  baseForm.gender = data.gender
+  baseForm.phone = data.phone
+  baseForm.wx = data.wx
+  baseForm.qq = data.qq
+  baseForm.desc = desc.value = data.desc
+  loading.form = false
 })
 
-const coldTime=ref(0)
-const isEmailValid=ref(true)
-const onValidate=(prop,isValid)=>{
-  if(prop==='email')
-    isEmailValid.value=isValid
+const coldTime = ref(0)
+const isEmailValid = ref(true)
+const onValidate = (prop, isValid) => {
+  if (prop === 'email')
+    isEmailValid.value = isValid
 }
-function sendEmailCode(){
-  emailFormRef.value.validate(isValid=>{
-    if(isValid){
-      coldTime.value=60
-      get(`/api/auth/ask-code?email=${emailForm.email}&type=modify`,()=>{
+
+function sendEmailCode() {
+  emailFormRef.value.validate(isValid => {
+    if (isValid) {
+      coldTime.value = 60
+      get(`/api/auth/ask-code?email=${emailForm.email}&type=modify`, () => {
         ElMessage.success(`验证码已成功发送到邮箱：${emailForm.email},请注意查收`)
-        const handle=setInterval(()=>{
+        const handle = setInterval(() => {
           coldTime.value--
-          if (coldTime.value===0){
+          if (coldTime.value === 0) {
             clearInterval(handle)
           }
-        },1000)
-      },(message)=>{
+        }, 1000)
+      }, (message) => {
         ElMessage.warning(message)
-        coldTime.value=0
+        coldTime.value = 0
       })
     }
   })
 }
-function modifyEmail(){
-  emailFormRef.value.validate(isValid=>{
-    post('/api/user/modify-email',emailForm,()=>{
+
+function modifyEmail() {
+  emailFormRef.value.validate(isValid => {
+    post('/api/user/modify-email', emailForm, () => {
       ElMessage.success('邮件修改成功')
-      store.user.email=emailForm.email
-      emailForm.code=''
+      store.user.email = emailForm.email
+      emailForm.code = ''
     })
   })
 }
@@ -122,7 +124,8 @@ function modifyEmail(){
   <div style="display: flex;max-width: 950px;margin: auto">
     <div class="settings-left">
       <card :icon="User" title="账号信息设置" desc="在此编辑个人信息" v-loading="loading.form">
-        <el-form :model="baseForm" :rules="rules" ref="baseFormRef" label-position="top" style="margin: 0 10px 10px 10px">
+        <el-form :model="baseForm" :rules="rules" ref="baseFormRef" label-position="top"
+                 style="margin: 0 10px 10px 10px">
           <el-form-item label="用户名" prop="username">
             <el-input v-model="baseForm.username" maxlength="20"/>
           </el-form-item>
@@ -148,13 +151,15 @@ function modifyEmail(){
           </el-form-item>
           <div>
             <el-button :icon="Select" @click="saveDetails" :loading="loading.base"
-                       type="success">保存用户信息</el-button>
+                       type="success">保存用户信息
+            </el-button>
           </div>
         </el-form>
       </card>
 
       <card style="margin-top: 10px" :icon="Message" title="电子邮件设置" desc="可以在此修改默认绑定">
-        <el-form :model="emailForm" @validate="onValidate" :rules="rules" ref="emailFormRef" label-position="top" style="margin: 0 10px 10px 10px">
+        <el-form :model="emailForm" @validate="onValidate" :rules="rules" ref="emailFormRef" label-position="top"
+                 style="margin: 0 10px 10px 10px">
           <el-form-item label="电子邮件" prop="email">
             <el-input v-model="emailForm.email"/>
           </el-form-item>
@@ -166,7 +171,8 @@ function modifyEmail(){
               <el-col :span="6">
                 <el-button type="success" style="width: 100%" :disabled="!isEmailValid || coldTime>0"
                            @click="sendEmailCode" plain>
-                  {{coldTime>0? `请稍后${coldTime}秒`:'获取验证码'}}</el-button>
+                  {{ coldTime > 0 ? `请稍后${coldTime}秒` : '获取验证码' }}
+                </el-button>
               </el-col>
             </el-row>
           </el-form-item>
@@ -183,11 +189,16 @@ function modifyEmail(){
         <card>
           <div style="text-align: center;padding: 5px 15px 0 15px">
             <el-avatar :size="70" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"/>
+            <div style="margin: 5px 0">
+              <el-upload>
+                <el-button size="small" round>修改头像</el-button>
+              </el-upload>
+            </div>
             <div style="font-weight: bold">你好，{{ store.user.username }}</div>
           </div>
           <el-divider style="margin: 10px 0"/>
           <div style="font-size: 14px;color: grey;padding: 10px;text-align: center;">
-            {{desc||'这个用户很懒，没有写个人简介'}}
+            {{ desc || '这个用户很懒，没有写个人简介' }}
           </div>
         </card>
         <card style="margin-top: 10px;font-size: 14px">
