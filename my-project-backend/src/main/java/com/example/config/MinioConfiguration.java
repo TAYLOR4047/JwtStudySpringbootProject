@@ -17,7 +17,6 @@ public class MinioConfiguration {
     @Value("${spring.minio.password}")
     String password;
 
-
     @Bean
     public MinioClient minioClient(){
         log.info("Init minio client...");
