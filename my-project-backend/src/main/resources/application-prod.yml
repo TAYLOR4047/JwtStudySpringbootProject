@@ -43,3 +43,9 @@ spring:
       origin: '*'
       credentials: false
       methods: '*'
+  minio:
+    endpoint: 'http://127.17.0.2:9090'
+    username: 'admin'
+    password: 'admin1234'
+  weather:
+    key: dac92743bb29412b846465e5edabe8b5

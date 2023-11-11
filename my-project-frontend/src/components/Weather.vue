@@ -21,7 +21,7 @@
     <div style="display: grid;grid-template-columns: repeat(5,1fr);text-align: center">
       <div v-for="item in 5">
         <div style="font-size: 13px">{{ item }}时</div>
-        <div>
+        <div style="font-size: 23px">
           <i class="qi-301-fill"></i>
         </div>
         <div style="font-size: 12px">20</div>
