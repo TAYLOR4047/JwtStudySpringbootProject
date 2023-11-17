@@ -5,6 +5,7 @@ import {Calendar, CollectionTag, EditPen, Link} from "@element-plus/icons-vue";
 import Weather from "@/components/Weather.vue";
 import {computed, reactive} from "vue";
 import {ElMessage} from "element-plus";
+import TopicEditor from "@/components/TopicEditor.vue";
 
 const weather=reactive({
   location:{},
@@ -103,6 +104,7 @@ navigator.geolocation.getCurrentPosition(position=>{
         </div>
       </div>
     </div>
+    <topic-editor :show="true"/>
   </div>
 </template>
 
