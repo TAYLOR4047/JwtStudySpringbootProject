@@ -3,7 +3,7 @@
 import LightCard from "@/components/LightCard.vue";
 import {Calendar, CollectionTag, EditPen, Link} from "@element-plus/icons-vue";
 import Weather from "@/components/Weather.vue";
-import {computed, reactive} from "vue";
+import {computed, reactive, ref} from "vue";
 import {ElMessage} from "element-plus";
 import TopicEditor from "@/components/TopicEditor.vue";
 
@@ -13,6 +13,8 @@ const weather=reactive({
   hourly:[],
   success:false
 })
+
+const editor=ref(false)
 
 const today = computed(() => {
   const date = new Date()
@@ -44,7 +46,7 @@ navigator.geolocation.getCurrentPosition(position=>{
   <div style="display: flex;margin: 20px auto;gap: 20px;max-width: 900px">
     <div style="flex: 1">
       <light-card>
-        <div class="create-topic">
+        <div class="create-topic" @click="editor=true">
           <el-icon><EditPen/></el-icon>点击发表主题...
         </div>
       </light-card>
@@ -104,7 +106,7 @@ navigator.geolocation.getCurrentPosition(position=>{
         </div>
       </div>
     </div>
-    <topic-editor :show="true"/>
+    <topic-editor :show="editor" @close="editor=false"/>
   </div>
 </template>
 
