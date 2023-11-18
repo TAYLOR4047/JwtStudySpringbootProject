@@ -20,8 +20,9 @@ public class ObjectController {
     @Resource
     ImageService service;
 
-    @GetMapping("/images/avatar/**")
+    @GetMapping("/images/**")
     public void imageFetch(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        response.setHeader("Content-type","image/jpg");
         this.fetchImage(request, response);
     }
 
@@ -31,11 +32,13 @@ public class ObjectController {
         ServletOutputStream stream=response.getOutputStream();
         if(imagePath.length()<=13){
             log.info("Avatar的URL过短，无法找到");
+            response.setStatus(404);
             stream.println(RestBean.failure(404,"Not Found").toString());
         }else{
             try {
                 service.fetchImageFromMinio(stream,imagePath);
                 response.setHeader("Cache-Control","max-age=2592000");
+
             } catch (ErrorResponseException e) {
                 if(e.response().code()==404){
                     response.setStatus(404);

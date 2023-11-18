@@ -4,6 +4,7 @@ import com.example.entity.RestBean;
 import com.example.service.ImageService;
 import com.example.utils.Const;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +18,26 @@ public class ImageController {
 
     @Resource
     ImageService service;
+
+
+    @PostMapping("/cache")
+    public RestBean<String> uploadImageCache(@RequestParam("file") MultipartFile file,
+                                             @RequestAttribute(Const.ATTR_USER_ID) int id,
+                                             HttpServletResponse response) throws IOException {
+        //帖子上传的图片的大小
+        if(file.getSize()>1024*1024*5)
+            return RestBean.failure(400,"图片不能大于5MB");
+        log.info("正在进行图片上传操作...");
+        String url= service.uploadImageCache(file,id);
+        if(url!=null){
+            log.info("图片上传成功，大小："+file.getSize());
+            return RestBean.success(url);
+        }else{
+            response.setStatus(400);
+            return RestBean.failure(400,"图片上传失败，请联系管理员！");
+        }
+    }
+
 
     //存储用户头像不直接保存用户uid，而且采用随机数进行直接的保存
     @PostMapping("/avatar")
