@@ -5,7 +5,7 @@ import {Quill, QuillEditor} from "@vueup/vue-quill";
 import ImageResize from "quill-image-resize-vue";
 import {ImageExtend,QuillWatch} from "quill-image-super-solution-module";
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import {accessHeader} from "@/net";
+import {accessHeader, get} from "@/net";
 import axios from "axios";
 
 
@@ -19,20 +19,18 @@ const editor=reactive({
   type: null,
   title: '',
   text: '',
-  loading: false
+  loading: false,
+  types: []
 })
 
-const types=[
-  {id: 1,name: '日常闲聊',desc: '在这里分享你的日常生活！'},
-  {id: 2,name: '游戏交友',desc: '在这里找到你的动物伙伴！'},
-  {id: 3,name: '踩坑记录',desc: '拒绝重复掉进同一个坑，告诉大家你的方法吧！'},
-]
 
 //TODO:本页面依赖导入可能存在问题，需要后期去排查
 
 function submitTopic(){
   console.info(editor.text);
 }
+
+get('/api/forum/types',data=>editor.types=data)
 
 Quill.register('modules/imageResize',ImageResize)
 Quill.register('modules/ImageExtend',ImageExtend)
@@ -106,8 +104,8 @@ const editorOption={
     </template>
     <div style="display: flex;gap: 10px">
       <div style="width: 150px">
-        <el-select placeholder="选择帖子类型" v-model="editor.type">
-          <el-option v-for="item in types" :value="item.id" :label="item.name"/>
+        <el-select placeholder="选择帖子类型" v-model="editor.type" :disabled="!editor.types.length">
+          <el-option v-for="item in editor.types" :value="item.id" :label="item.name"/>
         </el-select>
       </div>
       <div style="flex: 1">
@@ -115,7 +113,7 @@ const editorOption={
       </div>
     </div>
     <div style="margin-top: 15px;height: 460px;overflow: hidden;border-radius: 5px"
-         v-loading="editor.loading"
+         v-loading="editor.uploading"
          element-loading-text="正在上传图片，请稍后...">
       <quill-editor v-model:content="editor.text" style="height: calc(100% - 45px)"
                     content-type="delta"
